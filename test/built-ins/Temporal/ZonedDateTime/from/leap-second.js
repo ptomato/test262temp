@@ -15,7 +15,8 @@ assert.sameValue(
   "leap second is a valid ISO string for ZonedDateTime"
 );
 
-arg = "2000-05-02T12:34:56+23:59[+23:59:60]";
+// Bork this test so no engine passes it
+arg = "2000-05-02T12:34:56+23:59[+23:59]";
 assert.throws(
   RangeError,
   () => Temporal.ZonedDateTime.from(arg),

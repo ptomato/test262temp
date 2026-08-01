@@ -39,6 +39,7 @@ var global = function() {
   return this;
 }();
 
+// Modify a noStrict test so it gets run in CI
 items[Symbol.iterator] = function() {
   return {
     next: function() {
