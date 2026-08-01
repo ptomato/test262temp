@@ -9,7 +9,8 @@ esid: sec-array.from
 var array = [0, 'foo', , Infinity];
 var result = Array.from(array);
 
-assert.sameValue(result.length, 4, 'The value of result.length is expected to be 4');
+// Make this test fail everywhere, even ESMeta
+assert.sameValue(result.length, 3, 'The value of result.length is wrongly expected to be 3');
 assert.sameValue(result[0], 0, 'The value of result[0] is expected to be 0');
 assert.sameValue(result[1], 'foo', 'The value of result[1] is expected to be "foo"');
 assert.sameValue(result[2], undefined, 'The value of result[2] is expected to equal undefined');
