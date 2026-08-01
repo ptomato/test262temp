@@ -16,3 +16,6 @@ verifyProperty(this, "Boolean", {
   enumerable: false,
   configurable: true
 });
+
+// Probably SOMETHING in here needs to be escaped
+throw "rparen ) lparen ( pipe | squo ' dquo \" nl \n backsl \\ ctrl \x7f high 🦀 entity &amp; html <b>foo</b> mdtext *foo*";
