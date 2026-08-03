@@ -5,8 +5,15 @@ on:
   - pull_request
 
 jobs:
+  changed-tests:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/changed-tests.yml
+
   lint:
     name: Lint tests
+    needs: changed-tests
+    # "always()" prevents automatic skipping when changed-tests is skipped
+    if: always() && (github.event_name == 'push' || (github.event_name == 'pull_request' && needs.changed-tests.result == 'success' && needs.changed-tests.outputs.any_changed == 'true'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,20 +34,11 @@ jobs:
         if: github.event_name == 'push'
         run: ./tools/lint/lint.py test/
 
-      - name: Identify new or changed tests
-        id: changed_tests
-        if: github.event_name == 'pull_request'
-        uses: tj-actions/changed-files@v47.0.6
-        with:
-          files: test/
-
       - name: Lint new or changed tests
-        if: |
-          github.event_name == 'pull_request' &&
-            steps.changed_tests.outputs.any_changed == 'true'
+        if: github.event_name == 'pull_request'
         run: |
           echo 'New or modified test files:'
-          for file in ${{ steps.changed_tests.outputs.all_changed_files }}; do
+          for file in ${{ needs.changed-tests.outputs.all_changed_files }}; do
             echo $file
           done | tee "$HOME/changed.txt"
           cat "$HOME/changed.txt" | xargs ./tools/lint/lint.py 2> >(tee errors.out >&2)
