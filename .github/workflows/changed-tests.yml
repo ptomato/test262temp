@@ -1,0 +1,28 @@
+name: Changed tests
+
+on:
+  workflow_call:
+    outputs:
+      any_changed:
+        description: 'Whether any test files changed'
+        value: ${{ jobs.changed-tests.outputs.any_changed }}
+      all_changed_files:
+        description: 'Space-separated list of changed test files'
+        value: ${{ jobs.changed-tests.outputs.all_changed_files }}
+
+jobs:
+  changed-tests:
+    name: Identify changed tests
+    runs-on: ubuntu-latest
+    outputs:
+      any_changed: ${{ steps.changed.outputs.any_changed }}
+      all_changed_files: ${{ steps.changed.outputs.all_changed_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Identify new or changed tests
+        id: changed
+        uses: tj-actions/changed-files@v47.0.6
+        with:
+          files: test/

@@ -3,8 +3,13 @@ name: 'esmeta test262'
 on: [pull_request]
 
 jobs:
+  changed-tests:
+    uses: ./.github/workflows/changed-tests.yml
+
   esmeta-test262:
     name: 'esmeta test262'
+    needs: changed-tests
+    if: needs.changed-tests.outputs.any_changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,17 +36,10 @@ jobs:
         working-directory: ${{ env.ESMETA_HOME }}
         run: sbt assembly
 
-      - name: Identify new or changed tests
-        id: changed_tests
-        uses: tj-actions/changed-files@v47.0.6
-        with:
-          files: test/
-
       - name: run test262
-        if: steps.changed_tests.outputs.any_changed == 'true'
         run: |
           echo 'New or modified test files:'
-          for file in ${{ steps.changed_tests.outputs.all_changed_files }}; do
+          for file in ${{ needs.changed-tests.outputs.all_changed_files }}; do
             echo $file
           done | tee "$HOME/changed.txt"
           cat "$HOME/changed.txt" | xargs "${ESMETA_HOME}"/bin/esmeta test262-test -status -test262dir=$(pwd)
