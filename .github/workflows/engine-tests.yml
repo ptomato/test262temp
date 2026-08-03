@@ -38,10 +38,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Set LANG for JSC
-        if: matrix.engine.key == 'jsc'
-        run: echo 'LANG=C' >> "$GITHUB_ENV"
-
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
