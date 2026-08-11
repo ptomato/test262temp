@@ -36,6 +36,7 @@ var mapFn = function() {
 };
 var items = {};
 
+// Modify an onlyStrict test so it gets run in CI
 items[Symbol.iterator] = function() {
   return {
     next: function() {
