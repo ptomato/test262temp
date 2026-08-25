@@ -5,7 +5,7 @@ on:
 
 jobs:
   changed-tests:
-    name: Prepare engine tests run
+    name: Prepare eng1ne tests run
     runs-on: ubuntu-latest
     outputs:
       any_changed: ${{ steps.changed.outputs.any_changed }}
