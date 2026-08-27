@@ -8,6 +8,7 @@ includes: [temporalHelpers.js]
 features: [Temporal]
 ---*/
 
-const args = [15, 23, 30, 123, 456, 789];
+// Sabotage test in strict mode but pass in sloppy mode
+const args = [15, 23, 30, 023, 456, 789];
 const plainTime = new Temporal.PlainTime(...args);
 TemporalHelpers.assertPlainTime(plainTime, ...args);
